@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
       return Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height * 0.5,
-        child: Text(""),
+        child: Text("hello"),
       );
     });
   }

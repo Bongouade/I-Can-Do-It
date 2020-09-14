@@ -23,7 +23,7 @@ class ChallengeModel {
 
   Map<String, dynamic> toJSON() {
     return {
-      "anme": name,
+      "name": name,
       "target": target,
       "unity": unity.toString(),
     };

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'components/build_challenges_list.dart';
 
+import '../controllers/challenges_controller.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -10,8 +12,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  ChallengesController _controller = ChallengesController();
   String unityChallenge = "KG";
+  String nameChallenge;
+  String targetChallenge;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,9 @@ class _HomeState extends State<Home> {
             child: ListView(
               children: [
                 TextFormField(
+                  onSaved: (value) {
+                    nameChallenge = value;
+                  },
                   validator: (value) {
                     final RegExp checkReg = RegExp(r'^\D+$');
                     if (value.isEmpty) {
@@ -62,6 +69,9 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 TextFormField(
+                  onSaved: (value) {
+                    targetChallenge = value;
+                  },
                   validator: (value) {
                     final _isInt = int.tryParse(value);
                     if (_isInt == null) {
@@ -103,7 +113,12 @@ class _HomeState extends State<Home> {
                 RaisedButton(
                   onPressed: () {
                     if (formKey.currentState.validate()) {
-                      // formKey.currentState.save();
+                      formKey.currentState.save();
+                      _controller.addChallenge(
+                        name: nameChallenge,
+                        target: targetChallenge,
+                        unity: unityChallenge,
+                      );
                     }
                   },
                   child: Text("Ajouter le Chanllenge"),

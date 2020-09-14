@@ -25,12 +25,10 @@ class ChallengesController {
     );
     //sauvegarde de nos données
     final bool resultat = await _save();
-    if(resultat){
+    if (resultat) {
       print("ça marche $resultat");
-    }
-    else {
+    } else {
       print("ça bug $resultat");
-
     }
 
     return getChallenges();
@@ -38,13 +36,12 @@ class ChallengesController {
 
   Future<bool> _save() async {
     SharedPreferences localData = await SharedPreferences.getInstance();
-    if(!_challengesList.isNotEmpty){
-    List<String> _jsonList = _challengesList
-    .map((challenge) {
-      jsonEncode(challenge.toJSON());
-    }).toList();
-     return localData.setStringList(
-      "ChallengesList", _jsonList);
+    if (_challengesList.isNotEmpty) {
+      List<String> _jsonList = _challengesList.map((challenge) {
+        jsonEncode(challenge.toJSON());
+      }).toList();
+      print(_jsonList);
+      return localData.setStringList("ChallengesList", _jsonList);
     }
     return false;
   }

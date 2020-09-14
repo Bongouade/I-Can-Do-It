@@ -26,11 +26,14 @@ class ChallengesController {
     //sauvegarde de nos données
     final bool resultat = await _save();
     if(resultat){
-
+      print("ça marche $resultat");
     }
     else {
-      
+      print("ça bug $resultat");
+
     }
+
+    return getChallenges();
   }
 
   Future<bool> _save() async {

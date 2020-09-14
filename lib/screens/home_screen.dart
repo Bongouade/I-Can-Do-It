@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
                       child: Text("Kg"),
                     ),
                     DropdownMenuItem(
-                      value: "Km",
+                      value: "KM",
                       child: Text("Km"),
                     ),
                   ],

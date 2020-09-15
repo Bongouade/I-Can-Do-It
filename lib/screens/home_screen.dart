@@ -12,10 +12,17 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  ChallengesController _controller = ChallengesController();
+  final ChallengesController _controller = ChallengesController();
+  Future<List> challengeData;
   String unityChallenge = "KG";
   String nameChallenge;
   String targetChallenge;
+
+  @override
+  void initState() {
+    challengeData = _controller.initChallengesList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,10 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
-      body: ChallengesListBuilder(),
+      body: ChallengesListBuilder(
+        challengeData: challengeData,
+        controller: _controller,
+      ),
       backgroundColor: Color(0xff414a4c),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -115,10 +125,10 @@ class _HomeState extends State<Home> {
                     if (formKey.currentState.validate()) {
                       formKey.currentState.save();
                       _controller.addChallenge(
-                        name: nameChallenge,
-                        target: targetChallenge,
-                        unity: unityChallenge,
-                      );
+                          name: nameChallenge,
+                          target: targetChallenge,
+                          unity: unityChallenge);
+                      Navigator.pop(context);
                     }
                   },
                   child: Text("Ajouter le Chanllenge"),

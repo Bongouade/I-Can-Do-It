@@ -11,10 +11,6 @@ class ChallengesController {
   List<ChallengeModel> _challengesList = [];
   SharedPreferences _localData;
 
-  List<ChallengeModel> getChallenges() {
-    return _challengesList;
-  }
-
   Future<List<ChallengeModel>> initChallengesList() async {
     _localData = await SharedPreferences.getInstance();
     // _localData.clear();
@@ -51,17 +47,15 @@ class ChallengesController {
       ),
     );
     //sauvegarde de nos données
-    final bool resultat = await _save();
-    if (resultat) {
-      // print("ça marche $resultat");
-    } else {
-      // print("ça bug $resultat");
-    }
+    await _save();
 
-    return getChallenges();
+    return _challengesList;
   }
 
-  Future<bool> _save() async {
+  Future<bool> _save({bool remove}) async {
+    if (remove) {
+      return _localData.setStringList(KeyAcess, []);
+    }
     if (_challengesList.isNotEmpty) {
       List<String> _jsonList = _challengesList
           .map((challenge) => jsonEncode(challenge.toJSON()))
@@ -70,5 +64,12 @@ class ChallengesController {
       return _localData.setStringList(KeyAcess, _jsonList);
     }
     return false;
+  }
+
+  Future<List<ChallengeModel>> remove({@required int index}) async {
+    _challengesList.removeAt(index);
+    await _save(remove: true);
+
+    return _challengesList;
   }
 }

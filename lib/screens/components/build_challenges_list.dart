@@ -30,15 +30,24 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
           print(_challengesList);
           bool test = data.hasData;
           print("data $test");
+
           if (!data.hasData) {
             return Container(
-                alignment: Alignment.center,
-                child:
-                    Text("Aucun challenge en cours pourtant tu peux le faire",
-                        style: TextStyle(
-                          color: Colors.orange[900],
-                          fontSize: 18.0,
-                        )));
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            );
+          } else if (_challengesList.isEmpty) {
+            return Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun challenge en cours pourtant tu peux le faire !",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.orange[600],
+                  fontSize: 18.0,
+                ),
+              ),
+            );
           }
           return ListView.builder(
             itemCount: _challengesList.length,
@@ -65,6 +74,7 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
                               actions: [
                                 FlatButton(
                                   onPressed: () {
+                                    widget.controller.remove(index: index);
                                     Navigator.pop(context, true);
                                   },
                                   child: Text("Oui"),

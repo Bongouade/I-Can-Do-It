@@ -17,9 +17,10 @@ class ChallengesController {
 
   Future<List<ChallengeModel>> initChallengesList() async {
     _localData = await SharedPreferences.getInstance();
+    // _localData.clear();
     final List<String> _tempList = _localData.getStringList(KeyAcess);
 
-    if (_tempList.isNotEmpty) {
+    if (_tempList != null) {
       // final List<dynamic> _jsonDecodeList = _tempList
       // ou celui du bas, il y a une erreur qui va arrêter l'application
       // alors tu remets l'ecriture du haut ou tu cast le tout

@@ -26,9 +26,19 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
         future: _challengesList,
         builder: (context, AsyncSnapshot<List<ChallengeModel>> data) {
           List<ChallengeModel> _challengesList = data.data;
-
+          print("la listes de challenge");
+          print(_challengesList);
+          bool test = data.hasData;
+          print("data $test");
           if (!data.hasData) {
-            return Text("pas de challenges de créés");
+            return Container(
+                alignment: Alignment.center,
+                child:
+                    Text("Aucun challenge en cours pourtant tu peux le faire",
+                        style: TextStyle(
+                          color: Colors.orange[900],
+                          fontSize: 18.0,
+                        )));
           }
           return ListView.builder(
             itemCount: _challengesList.length,
@@ -47,7 +57,9 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text("Confimation",
-                                  style: TextStyle(color: Colors.blue)),
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                  )),
                               content: Text(
                                   "Êtes-vous sûr de vouloir suprimer le challenge"),
                               actions: [

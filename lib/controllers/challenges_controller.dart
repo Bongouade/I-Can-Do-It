@@ -53,7 +53,7 @@ class ChallengesController {
   }
 
   Future<bool> _save({bool remove}) async {
-    if (remove) {
+    if (remove ?? false) {
       return _localData.setStringList(KeyAcess, []);
     }
     if (_challengesList.isNotEmpty) {
@@ -66,10 +66,8 @@ class ChallengesController {
     return false;
   }
 
-  Future<List<ChallengeModel>> remove({@required int index}) async {
+  void remove({@required int index}) async {
     _challengesList.removeAt(index);
     await _save(remove: true);
-
-    return _challengesList;
   }
 }

@@ -59,6 +59,26 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
                   right: 8.0,
                 ),
                 child: Dismissible(
+                  onDismissed: (direction) {
+                    if (direction == DismissDirection.endToStart) {
+                      Scaffold.of(context).showSnackBar(
+                        _buildSanackBar(
+                          content:
+                              "Le challenge ${_challengesList[index].name} a bien été validé.",
+                        ),
+                      );
+                      widget.controller.remove(index: index);
+                    }
+                    if (direction == DismissDirection.startToEnd) {
+                      Scaffold.of(context).showSnackBar(
+                        _buildSanackBar(
+                          content:
+                              "Le challenge ${_challengesList[index].name} à bien été suprimer.",
+                        ),
+                      );
+                      widget.controller.remove(index: index);
+                    }
+                  },
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.startToEnd) {
                       final bool resultat = await showDialog<bool>(
@@ -74,7 +94,6 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
                               actions: [
                                 FlatButton(
                                   onPressed: () {
-                                    widget.controller.remove(index: index);
                                     Navigator.pop(context, true);
                                   },
                                   child: Text("Oui"),
@@ -149,5 +168,14 @@ class _ChallengesListBuilderState extends State<ChallengesListBuilder> {
             },
           );
         });
+  }
+
+  SnackBar _buildSanackBar({@required String content}) {
+    return SnackBar(
+      content: Text(
+        content,
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }

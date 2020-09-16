@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
+import 'dart:collection';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,11 +8,19 @@ import '../models/challenge_model.dart';
 
 const String KeyAcess = "ChallengesList";
 
-class ChallengesController {
+class ChallengesController extends ChangeNotifier {
   List<ChallengeModel> _challengesList = [];
   SharedPreferences _localData;
 
-  Future<List<ChallengeModel>> initChallengesList() async {
+  ChallengesController() {
+    _initChallengesList();
+  }
+
+  List<ChallengeModel> getChallenge() {
+    return UnmodifiableListView(_challengesList);
+  }
+
+  void _initChallengesList() async {
     _localData = await SharedPreferences.getInstance();
     // _localData.clear();
     final List<String> _tempList = _localData.getStringList(KeyAcess);
@@ -32,10 +41,10 @@ class ChallengesController {
 
       print(_challengesList);
     }
-    return _challengesList;
+    notifyListeners();
   }
 
-  Future<List<ChallengeModel>> addChallenge(
+  void addChallenge(
       {@required String name,
       @required String target,
       @required String unity}) async {
@@ -48,12 +57,11 @@ class ChallengesController {
     );
     //sauvegarde de nos données
     await _save();
-
-    return _challengesList;
+    notifyListeners();
   }
 
   Future<bool> _save({bool remove}) async {
-    if (remove ?? false) {
+    if (_challengesList.length < 1 && remove ?? false) {
       return _localData.setStringList(KeyAcess, []);
     }
     if (_challengesList.isNotEmpty) {
@@ -69,5 +77,6 @@ class ChallengesController {
   void remove({@required int index}) async {
     _challengesList.removeAt(index);
     await _save(remove: true);
+    notifyListeners();
   }
 }

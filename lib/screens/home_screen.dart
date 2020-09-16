@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'components/build_challenges_list.dart';
+import 'package:provider/provider.dart';
 
+import 'components/build_challenges_list.dart';
 import '../controllers/challenges_controller.dart';
 
 class Home extends StatefulWidget {
@@ -12,17 +13,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final ChallengesController _controller = ChallengesController();
-  Future<List> challengeData;
   String unityChallenge = "KG";
   String nameChallenge;
   String targetChallenge;
-
-  @override
-  void initState() {
-    challengeData = _controller.initChallengesList();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +27,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
-      body: ChallengesListBuilder(
-        challengeData: challengeData,
-        controller: _controller,
-      ),
+      body: ChallengesListBuilder(),
       backgroundColor: Color(0xff414a4c),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -124,12 +114,12 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     if (formKey.currentState.validate()) {
                       formKey.currentState.save();
-                      setState(() {
-                        challengeData = _controller.addChallenge(
-                            name: nameChallenge,
-                            target: targetChallenge,
-                            unity: unityChallenge);
-                      });
+
+                      Provider.of<ChallengesController>(context).addChallenge(
+                          name: nameChallenge,
+                          target: targetChallenge,
+                          unity: unityChallenge);
+
                       Navigator.pop(context);
                     }
                   },
